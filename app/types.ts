@@ -12,8 +12,9 @@ export interface Task {
   title: string
   completed: boolean
   due_date?: string
-  priority: "low" | "medium" | "high"
+  priority?: "low" | "medium" | "high"
   created_at: string
   updated_at: string
+  user_id: string
 }
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import type { Task } from "../types"
 import { supabase } from "../../lib/supabase"
 import { useAuth } from "./useAuth"
+import { addDays, isBefore } from "date-fns"
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([])
@@ -94,6 +95,18 @@ export function useTasks() {
     }
   }
 
+  function getUpcomingTasks() {
+    const now = new Date()
+    const sevenDaysFromNow = addDays(now, 7)
+    return tasks.filter(
+      (task) => task.due_date && !task.completed && isBefore(new Date(task.due_date), sevenDaysFromNow),
+    )
+  }
+
+  function markTaskAsCompleted(taskId: string, completed: boolean) {
+    setTasks((prevTasks) => prevTasks.map((task) => (task.id === taskId ? { ...task, completed } : task)))
+  }
+
   return {
     tasks,
     addTask,
@@ -102,6 +115,8 @@ export function useTasks() {
     deleteAllTasks,
     selectedTaskId,
     setSelectedTaskId,
+    getUpcomingTasks,
+    markTaskAsCompleted,
   }
 }
 

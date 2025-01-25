@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Notebook, CheckSquare, Settings, ChevronLeft, ChevronRight, Menu } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
-export function Sidebar() {
+type SidebarProps = {}
+
+export function Sidebar({}: SidebarProps) {
   const pathname = usePathname()
   const [isCollapsed, setIsCollapsed] = useState(false)
 
