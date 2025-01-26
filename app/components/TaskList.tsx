@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import type { Task } from "../types"
+import { TaskListSkeleton } from "./TaskListSkeleton" // Import the new skeleton component
 
 export function TaskList() {
   const router = useRouter()
@@ -20,10 +21,15 @@ export function TaskList() {
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
   const [priority, setPriority] = useState<"low" | "medium" | "high" | undefined>(undefined)
   const { tasks, addTask, updateTask, deleteTask, markTaskAsCompleted } = useTasks()
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const savedTaskTitle = localStorage.getItem("draftTaskTitle")
     if (savedTaskTitle) setNewTaskTitle(savedTaskTitle)
+    
+    // Simulate loading completion (you might want to remove this in actual implementation)
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
   }, [])
 
   useEffect(() => {
@@ -31,6 +37,7 @@ export function TaskList() {
   }, [newTaskTitle])
 
   const handleAddTask = async () => {
+    setLoading(true); 
     if (newTaskTitle.trim()) {
       const newTask: Omit<Task, "id" | "created_at" | "updated_at" | "user_id"> = {
         title: newTaskTitle,
@@ -47,6 +54,7 @@ export function TaskList() {
       setDueDate(undefined)
       setPriority(undefined)
       localStorage.removeItem("draftTaskTitle")
+      setLoading(false)
       router.push("/temp/task")
     }
   }
@@ -116,48 +124,61 @@ export function TaskList() {
         </Popover>
         <Button onClick={handleAddTask}>Add Task</Button>
       </div>
-      <div className="space-y-2">
-        {tasks.map((task) => (
-          <div key={task.id} className="flex items-center space-x-2 bg-secondary p-2 rounded-md">
-            <Checkbox
-              checked={task.completed}
-              onCheckedChange={(checked) => {
-                updateTask({ ...task, completed: checked as boolean })
-                markTaskAsCompleted(task.id, checked as boolean)
-                navigateToTask()
-              }}
-            />
-            <span className={cn("flex-grow", task.completed && "line-through")}>{task.title}</span>
-            <span className="text-sm text-muted-foreground">{format(new Date(task.created_at), "MMM d, yyyy")}</span>
-            {task.due_date && (
-              <span className="text-sm text-muted-foreground">
-                Due: {format(new Date(task.due_date), "MMM d, yyyy")}
-              </span>
-            )}
-            {task.priority && (
-              <span
-                className={cn("text-sm", {
-                  "text-red-500": task.priority === "high",
-                  "text-yellow-500": task.priority === "medium",
-                  "text-green-500": task.priority === "low",
-                })}
-              >
-                {task.priority}
-              </span>
-            )}
-          <Button
-      variant="ghost"
-      size="icon"
-      onClick={() => {
-        deleteTask(task.id); // Delete the task
-        navigateToTask(); // Navigate to /temp/task after deleting
-      }}
-    >
-      <Trash2 className="h-4 w-4" />
-    </Button>
-          </div>
-        ))}
-      </div>
+      
+      {/* Conditional rendering based on loading and tasks */}
+      {loading ? (
+        <TaskListSkeleton />
+      ) : tasks.length > 0 ? (
+        <div className="space-y-2">
+          {tasks.map((task) => (
+            <div key={task.id} className="flex items-center justify-between space-x-2 bg-secondary p-2 rounded-md">
+              <div className="textcontainer flex w-1/2 justify-between items-center space-x-3">
+                <Checkbox
+                  checked={task.completed}
+                  onCheckedChange={(checked) => {
+                    updateTask({ ...task, completed: checked as boolean })
+                    markTaskAsCompleted(task.id, checked as boolean)
+                    navigateToTask()
+                  }}
+                />
+                <span className={cn("flex-wrap", task.completed && "line-through", "flex-grow")}>{task.title}</span>
+              </div>
+              <div className="infocontainer flex w-1/2 justify-between items-center p-1">
+                <span className="text-sm text-muted-foreground">Created: {format(new Date(task.created_at), "MMM d, yyyy")}</span>
+                {task.due_date && (
+                  <span className="text-sm text-muted-foreground">
+                    Due: {format(new Date(task.due_date), "MMM d, yyyy")}
+                  </span>
+                )}
+                {task.priority && (
+                  <span className="text-sm text-muted-foreground">
+                    Priority:{" "}
+                    <span
+                      className={cn({
+                        "text-red-500": task.priority === "high",
+                        "text-yellow-500": task.priority === "medium",
+                        "text-green-500": task.priority === "low",
+                      })}
+                    >
+                      {task.priority}
+                    </span>
+                  </span>
+                )}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => {
+                    deleteTask(task.id);
+                    navigateToTask();
+                  }}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Input } from "@/components/ui/input"
@@ -13,7 +12,6 @@ export function Search() {
   const router = useRouter()
   const { notes, setSelectedNoteId } = useNotes()
   const { tasks, setSelectedTaskId } = useTasks()
-
   const [searchResults, setSearchResults] = useState<Array<{ id: string; title: string; type: 'note' | 'task' }>>([])
 
   useEffect(() => {
@@ -21,10 +19,8 @@ export function Search() {
       keys: ['title', 'content'],
       threshold: 0.3,
     }
-
     const notesFuse = new Fuse(notes, options)
     const tasksFuse = new Fuse(tasks, options)
-
     if (searchQuery) {
       const filteredNotes = notesFuse.search(searchQuery).map(result => ({ ...result.item, type: 'note' as const }))
       const filteredTasks = tasksFuse.search(searchQuery).map(result => ({ ...result.item, type: 'task' as const }))
@@ -53,17 +49,17 @@ export function Search() {
         onChange={(e) => setSearchQuery(e.target.value)}
       />
       {searchResults.length > 0 && (
-        <div className="mt-4">
+        <div className="mt-4 bg-secondary/50 rounded-lg p-3">
           <h3 className="font-semibold mb-2">Search Results:</h3>
           <div className="space-y-2">
             {searchResults.map(result => (
               <Button
                 key={result.id}
                 variant="ghost"
-                className="w-full justify-start"
+                className="w-full justify-start whitespace-normal h-auto text-wrap text-left"
                 onClick={() => handleResultClick(result.id, result.type)}
               >
-                {result.title} ({result.type})
+                <span className="break-words">{result.title} ({result.type})</span>
               </Button>
             ))}
           </div>
