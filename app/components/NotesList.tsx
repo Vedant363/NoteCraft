@@ -16,8 +16,8 @@ export function NotesList() {
 
   useEffect(() => {
     // Simulate loading completion (replace with actual data fetching logic)
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
+    const timer = setTimeout(() => setLoading(false), 1000)
+    return () => clearTimeout(timer)
   }, [])
 
   if (loading) {

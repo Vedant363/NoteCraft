@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Notebook, CheckSquare, Settings, ChevronLeft, ChevronRight, Menu } from "lucide-react"
+import { Notebook, CheckSquare, Settings, ChevronLeft, ChevronRight, Menu, CalendarIcon, Trash2 } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 type SidebarProps = {}
@@ -43,6 +43,26 @@ export function Sidebar({}: SidebarProps) {
             <Link href="/tasks">
               <CheckSquare className="h-4 w-4" />
               {(!isCollapsed || isMobile) && <span className="ml-2">Tasks</span>}
+            </Link>
+          </Button>
+          <Button
+            variant={pathname === "/calendar" ? "default" : "ghost"}
+            className={`w-full justify-start ${isCollapsed && !isMobile ? "px-2" : ""} text-sm md:text-base`}
+            asChild
+          >
+            <Link href="/calendar">
+              <CalendarIcon className="h-4 w-4" />
+              {(!isCollapsed || isMobile) && <span className="ml-2">Calendar</span>}
+            </Link>
+          </Button>
+          <Button
+            variant={pathname === "/trash" ? "default" : "ghost"}
+            className={`w-full justify-start ${isCollapsed && !isMobile ? "px-2" : ""} text-sm md:text-base`}
+            asChild
+          >
+            <Link href="/trash">
+              <Trash2 className="h-4 w-4" />
+              {(!isCollapsed || isMobile) && <span className="ml-2">Trash</span>}
             </Link>
           </Button>
           <Button

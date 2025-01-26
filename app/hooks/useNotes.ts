@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import type { Note } from "../types"
 import { supabase } from "../../lib/supabase"
 import { useAuth } from "./useAuth"
@@ -8,15 +8,13 @@ export function useNotes() {
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null)
   const { user } = useAuth()
 
-  useEffect(() => {
-    if (user) fetchNotes()
-  }, [user])
+  const fetchNotes = useCallback(async () => {
+    if (!user) return
 
-  async function fetchNotes() {
     const { data, error } = await supabase
       .from("notes")
       .select("*")
-      .eq("user_id", user?.id)
+      .eq("user_id", user.id)
       .order("created_at", { ascending: false })
 
     if (error) {
@@ -24,7 +22,11 @@ export function useNotes() {
     } else {
       setNotes(data || [])
     }
-  }
+  }, [user])
+
+  useEffect(() => {
+    if (user) fetchNotes()
+  }, [user, fetchNotes])
 
   async function addNote(note: Omit<Note, "id" | "created_at" | "updated_at" | "user_id">) {
     if (!user) return
@@ -64,6 +66,25 @@ export function useNotes() {
   async function deleteNote(id: string) {
     if (!user) return
 
+    const noteToDelete = notes.find((note) => note.id === id)
+    if (!noteToDelete) return
+
+    const { error: trashError } = await supabase.from("trash").insert([
+      {
+        id: noteToDelete.id,
+        title: noteToDelete.title,
+        content: noteToDelete.content,
+        type: "note",
+        user_id: user.id,
+        deleted_at: new Date().toISOString(),
+      },
+    ])
+
+    if (trashError) {
+      console.error("Error moving note to trash:", trashError)
+      return
+    }
+
     const { error } = await supabase.from("notes").delete().eq("id", id).eq("user_id", user.id)
 
     if (error) {
@@ -96,6 +117,7 @@ export function useNotes() {
 
   return {
     notes,
+    fetchNotes,
     addNote,
     updateNote,
     deleteNote,

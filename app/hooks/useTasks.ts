@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import type { Task } from "../types"
 import { supabase } from "../../lib/supabase"
 import { useAuth } from "./useAuth"
@@ -9,15 +9,13 @@ export function useTasks() {
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
   const { user } = useAuth()
 
-  useEffect(() => {
-    if (user) fetchTasks()
-  }, [user])
+  const fetchTasks = useCallback(async () => {
+    if (!user) return
 
-  async function fetchTasks() {
     const { data, error } = await supabase
       .from("tasks")
       .select("*")
-      .eq("user_id", user?.id)
+      .eq("user_id", user.id)
       .order("created_at", { ascending: false })
 
     if (error) {
@@ -25,7 +23,11 @@ export function useTasks() {
     } else {
       setTasks(data || [])
     }
-  }
+  }, [user])
+
+  useEffect(() => {
+    if (user) fetchTasks()
+  }, [user, fetchTasks])
 
   async function addTask(task: Omit<Task, "id" | "created_at" | "updated_at" | "user_id">) {
     if (!user) return
@@ -64,6 +66,27 @@ export function useTasks() {
 
   async function deleteTask(id: string) {
     if (!user) return
+
+    const taskToDelete = tasks.find((task) => task.id === id)
+    if (!taskToDelete) return
+
+    const { error: trashError } = await supabase.from("trash").insert([
+      {
+        id: taskToDelete.id,
+        title: taskToDelete.title,
+        type: "task",
+        user_id: user.id,
+        deleted_at: new Date().toISOString(),
+        due_date: taskToDelete.due_date,
+        completed: taskToDelete.completed,
+        priority: taskToDelete.priority,
+      },
+    ])
+
+    if (trashError) {
+      console.error("Error moving task to trash:", trashError)
+      return
+    }
 
     const { error } = await supabase.from("tasks").delete().eq("id", id).eq("user_id", user.id)
 
@@ -109,6 +132,7 @@ export function useTasks() {
 
   return {
     tasks,
+    fetchTasks,
     addTask,
     updateTask,
     deleteTask,

@@ -21,15 +21,15 @@ export function TaskList() {
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
   const [priority, setPriority] = useState<"low" | "medium" | "high" | undefined>(undefined)
   const { tasks, addTask, updateTask, deleteTask, markTaskAsCompleted } = useTasks()
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const savedTaskTitle = localStorage.getItem("draftTaskTitle")
     if (savedTaskTitle) setNewTaskTitle(savedTaskTitle)
-    
+
     // Simulate loading completion (you might want to remove this in actual implementation)
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
+    const timer = setTimeout(() => setLoading(false), 1000)
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export function TaskList() {
   }, [newTaskTitle])
 
   const handleAddTask = async () => {
-    setLoading(true); 
+    setLoading(true)
     if (newTaskTitle.trim()) {
       const newTask: Omit<Task, "id" | "created_at" | "updated_at" | "user_id"> = {
         title: newTaskTitle,
@@ -65,7 +65,7 @@ export function TaskList() {
   }
 
   const navigateToTask = () => {
-    router.push('/temp/task');
+    router.push("/temp/task")
   }
 
   return (
@@ -124,7 +124,7 @@ export function TaskList() {
         </Popover>
         <Button onClick={handleAddTask}>Add Task</Button>
       </div>
-      
+
       {/* Conditional rendering based on loading and tasks */}
       {loading ? (
         <TaskListSkeleton />
@@ -144,7 +144,9 @@ export function TaskList() {
                 <span className={cn("flex-wrap", task.completed && "line-through", "flex-grow")}>{task.title}</span>
               </div>
               <div className="infocontainer flex w-1/2 justify-between items-center p-1">
-                <span className="text-sm text-muted-foreground">Created: {format(new Date(task.created_at), "MMM d, yyyy")}</span>
+                <span className="text-sm text-muted-foreground">
+                  Created: {format(new Date(task.created_at), "MMM d, yyyy")}
+                </span>
                 {task.due_date && (
                   <span className="text-sm text-muted-foreground">
                     Due: {format(new Date(task.due_date), "MMM d, yyyy")}
@@ -168,8 +170,7 @@ export function TaskList() {
                   variant="ghost"
                   size="icon"
                   onClick={() => {
-                    deleteTask(task.id);
-                    navigateToTask();
+                    deleteTask(task.id)
                   }}
                 >
                   <Trash2 className="h-4 w-4" />
