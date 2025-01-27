@@ -1,5 +1,4 @@
 "use client"
-
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "../hooks/useAuth"
@@ -77,7 +76,6 @@ export default function Settings() {
   return (
     <div className="p-4 space-y-6">
       <h1 className="text-2xl font-bold mb-4">Settings</h1>
-
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Appearance</h2>
         <div className="flex items-center space-x-2">

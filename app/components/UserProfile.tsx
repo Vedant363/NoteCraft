@@ -11,7 +11,7 @@ export function UserProfile() {
   if (!user) return null
 
   return (
-    <Button variant="ghost" asChild>
+    <Button variant="ghost" asChild className="hover:bg-gray-200">
       <Link href="/user" className="flex items-center space-x-2">
         <Avatar>
           <AvatarImage src={user.user_metadata?.avatar_url || "/avatars/avatar1.png"} />

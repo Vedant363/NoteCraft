@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Notebook, CheckSquare, Settings, ChevronLeft, ChevronRight, Menu, CalendarIcon, Trash2 } from "lucide-react"
+import { Notebook, CheckSquare, Settings, ChevronLeft, ChevronRight, Menu, CalendarIcon, PencilRuler, Trash2 } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 type SidebarProps = {}
@@ -53,6 +53,16 @@ export function Sidebar({}: SidebarProps) {
             <Link href="/calendar">
               <CalendarIcon className="h-4 w-4" />
               {(!isCollapsed || isMobile) && <span className="ml-2">Calendar</span>}
+            </Link>
+          </Button>
+          <Button
+            variant={pathname === "/draw" ? "default" : "ghost"}
+            className={`w-full justify-start ${isCollapsed && !isMobile ? "px-2" : ""} text-sm md:text-base`}
+            asChild
+          >
+            <Link href="/draw">
+              <PencilRuler className="h-4 w-4" />
+              {(!isCollapsed || isMobile) && <span className="ml-2">Draw</span>}
             </Link>
           </Button>
           <Button
