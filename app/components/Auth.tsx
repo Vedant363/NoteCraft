@@ -144,6 +144,7 @@ export function Auth() {
               onChange={handleInputChange}
               disabled={loading}
               required
+              className="bg-white placeholder:text-gray-300"
             />
           </div>
         </form>
