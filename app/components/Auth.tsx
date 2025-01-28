@@ -17,6 +17,8 @@ import {
 import { Label } from "@/components/ui/label"
 import { Notebook, Loader2 } from "lucide-react"
 import { ThemePicker } from "../components/ThemePicker"
+import { themes, type ThemeMode, type ThemeName, Theme } from "../styles/themes"
+import { useTheme } from "./ThemeProvider"
 
 interface FormState {
   email: string
@@ -98,9 +100,22 @@ export function Auth() {
     setFormState({ email: "", password: "" })
   }
 
+  const { theme, changeTheme } = useTheme()
+    const [selectedMode, setSelectedMode] = useState<ThemeMode | "system">("system")
+  
+    const currentTheme = theme ? (theme.split("-") as [ThemeMode, ThemeName]) : ["system", "default"]
+  
+    const handleThemeChange = (mode: ThemeMode | "system", name: ThemeName = "default") => {
+      if (mode === "system") {
+        changeTheme({ mode: "system", name: "default" })
+      } else {
+        changeTheme({ mode, name })
+      }
+      setSelectedMode(mode)
+  }
+
   return (
     <>
-    <ThemePicker />
     <Card className="w-[350px]">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl flex items-center justify-center">
