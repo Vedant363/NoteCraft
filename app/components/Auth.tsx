@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Notebook, Loader2 } from "lucide-react"
+import { ThemePicker } from "../components/ThemePicker"
 
 interface FormState {
   email: string
@@ -98,6 +99,8 @@ export function Auth() {
   }
 
   return (
+    <>
+    <ThemePicker />
     <Card className="w-[350px]">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl flex items-center justify-center">
@@ -177,6 +180,7 @@ export function Auth() {
         </Button>
       </CardFooter>
     </Card>
+    </>
   )
 }
 
