@@ -46,7 +46,7 @@ export function NotesList() {
                 <div className="flex justify-between items-center">
                   <Button
                     variant="ghost"
-                    className="w-full justify-start text-left truncate text-sm hover:bg-gray-200"
+                    className="w-full justify-start text-left truncate text-sm hover:bg-primary hover:text-white"
                     onClick={() => {
                       setSelectedNoteId(note.id)
                       router.push(`/notes/${note.id}`)
@@ -55,7 +55,7 @@ export function NotesList() {
                     {note.title}
                   </Button>
                   <div className="flex">
-                    <Button className="hover:bg-gray-200" variant="ghost" size="icon" onClick={() => deleteNote(note.id)}>
+                    <Button className="hover:bg-primary hover:text-white" variant="ghost" size="icon" onClick={() => deleteNote(note.id)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

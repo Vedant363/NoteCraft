@@ -1,9 +1,8 @@
 "use client"
-
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function TempPage() {
+function TempPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   
@@ -13,7 +12,13 @@ export default function TempPage() {
       router.replace(`/notes/${noteId}`)
     }
   }, [router, searchParams])
-
-  return null // This page won't render anything as it immediately redirects
+  return null
 }
 
+export default function TempPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <TempPageContent />
+    </Suspense>
+  )
+}

@@ -126,11 +126,12 @@ export function Auth() {
               id="email"
               name="email"
               type="email"
-              placeholder="m@example.com"
+              placeholder="abc@email.com"
               value={formState.email}
               onChange={handleInputChange}
               disabled={loading}
               required
+              className="bg-white placeholder:text-gray-300"
             />
           </div>
           <div className="space-y-2">
