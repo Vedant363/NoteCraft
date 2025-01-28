@@ -1,0 +1,208 @@
+/* Enhanced Markdown Styles */
+.prose {
+  max-width: 65ch;
+  color: inherit;
+  line-height: 1.6; /* Improves readability */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Sets a clean font */
+}
+
+.prose a {
+  color: #3182ce;
+  text-decoration: underline;
+  transition: color 0.3s ease; /* Adds a smooth color transition on hover */
+}
+
+.prose a:hover {
+  color: #2c5282; /* Darkens link color on hover for better UX */
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+.prose em {
+  font-style: italic;
+  color: #4a5568; /* Adds a subtle color to emphasized text */
+}
+
+.prose ol {
+  /* Target the <ol> element itself */
+  list-style: none; /* Remove default numbering */
+  padding-left: 0; /* Reset default padding */
+}
+
+.prose ol > li {
+  position: relative;
+  padding-left: 1.75em;
+  margin-bottom: 0.5em;
+}
+
+.prose ol > li::before {
+  content: counter(list-item) ".";
+  position: absolute;
+  left: 0;
+  font-weight: 400;
+  color: #718096;
+}
+
+.prose ul {
+  /* Target the <ul> element itself */
+  list-style: none; /* Remove default bullets */
+  padding-left: 0; /* Reset default padding */
+}
+
+.prose ul > li {
+  position: relative;
+  padding-left: 1.75em;
+  margin-bottom: 0.5em;
+}
+
+.prose ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  height: 0.375em;
+  width: 0.375em;
+  background-color: #718096;
+  border-radius: 50%;
+}
+
+.prose blockquote {
+  font-weight: 500;
+  font-style: italic;
+  color: #1a202c;
+  border-left-width: 0.25rem;
+  border-left-color: #0000ff;
+  quotes: "\201C" "\201D" "\2018" "\2019";
+  margin-top: 1.6em;
+  margin-bottom: 1.6em;
+  padding-left: 1em;
+  background-color: #f7fafc; /* Adds a light background to blockquotes */
+  border-radius: 0.375rem; /* Rounds the corners of blockquotes */
+}
+
+.prose code {
+  color: #000;
+  font-weight: 600;
+  background-color: #f1f5f9; /* Adds a light background to inline code */
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+}
+
+.prose pre {
+  color: #e2e8f0;
+  background-color: #f1f5f9;
+  overflow-x: auto;
+  font-size: 0.875em;
+  line-height: 1.7142857;
+  margin-top: 1.7142857em;
+  margin-bottom: 1.7142857em;
+  border-radius: 0.375rem;
+  padding: 0.857em 1.142em;
+  position: relative;
+}
+
+/* Adds a copy button to code blocks */
+
+.prose img {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  max-width: 100%; /* Ensures images are responsive */
+  border-radius: 0.375rem; /* Rounds the corners of images */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow to images */
+}
+
+.prose h2 {
+  color: inherit;
+  font-weight: 700;
+  font-size: 1.5em;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  line-height: 1.3333333;
+  border-bottom: 2px solid #e2e8f0; /* Adds an underline to headings */
+  padding-bottom: 0.3em;
+}
+
+.prose h3 {
+  color: inherit;
+  font-weight: 600;
+  font-size: 1.25em;
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+  line-height: 1.6;
+  border-bottom: 1px solid #e2e8f0; /* Adds an underline to subheadings */
+  padding-bottom: 0.2em;
+}
+
+.dark .prose {
+  color: #e2e8f0;
+}
+
+.dark .prose blockquote {
+  color: #e2e8f0;
+  border-left-color: #0000ff;
+  background-color: #2d3748; /* Darkens the blockquote background in dark mode */
+}
+
+.dark .prose code {
+  color: #e2e8f0;
+  background-color: #1a202c; /* Darkens the inline code background in dark mode */
+}
+
+.dark .prose pre {
+  color: #e2e8f0;
+  background-color: #1a202c; /* Darkens the code block background in dark mode */
+}
+
+.dark .prose a {
+  color: #63b3ed;
+}
+
+.dark .prose h2,
+.dark .prose h3 {
+  border-bottom-color: #4a5568;
+}
+
+.dark .prose em {
+  color: #e2e8f0; /* Lighter color for italic text in dark mode */
+}
+
+/* Add styles for code block copy button */
+.prose pre {
+  position: relative;
+}
+
+.prose pre .copy-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid #404040;
+  border-radius: 0.25rem;
+  color: #404040;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.prose pre:hover .copy-button {
+  opacity: 1;
+}
+
+.prose pre .copy-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.prose pre .copy-button:active {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.dark .prose pre .copy-button {
+border: 1px solid #fff;
+color: #fff;
+}
+
